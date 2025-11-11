@@ -43,5 +43,20 @@ svi_summary = (
 print(svi_summary.head())
 print(svi_summary.describe())
 
+# %%
+'''merge svi_summary with osm_tags on grid_id'''
+reference = pd.read_csv(r"/mnt/home/2715439w/sharedscratch/fairness/glasgow/results/glasgow_grid_20m.csv")
 
+osm_tags = osm_tags.drop(columns=["query_lat", "query_lon"], errors="ignore") # these columns are also in reference
+svi_summary = svi_summary.drop(columns=["query_lat", "query_lon"], errors="ignore") # these columns are also in reference
+
+merged = reference.merge(osm_tags, on="grid_id", how="left").merge(svi_summary, on="grid_id", how="left")
+
+# move grid_id to the front
+cols = ["grid_id"] + [c for c in merged.columns if c != "grid_id"]
+merged = merged[cols]
+
+print(merged.head())
+# %%
+merged.to_csv(r"/mnt/home/2715439w/sharedscratch/fairness/glasgow/results/cross_svi_osm.csv", index=False)
 # %%
