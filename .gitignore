@@ -8,3 +8,5 @@ jobs
 
 # files to ignore
 *.pbf
+*.html
+*.csv
