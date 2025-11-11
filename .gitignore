@@ -1,0 +1,10 @@
+# folders to ignore
+logs
+test_elephant_castle
+cache
+deprecated
+__pycache__/
+jobs
+
+# files to ignore
+*.pbf
