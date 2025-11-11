@@ -2,6 +2,7 @@
 logs
 test_elephant_castle
 cache
+results
 deprecated
 __pycache__/
 jobs
@@ -10,3 +11,4 @@ jobs
 *.pbf
 *.html
 *.csv
+*.parquet
