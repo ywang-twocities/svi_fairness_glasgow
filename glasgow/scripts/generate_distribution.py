@@ -128,7 +128,7 @@ for _, r in high_old.iterrows():
     folium.CircleMarker([r.query_lat, r.query_lon], radius=2, color="red").add_to(m)
 for _, r in low_new.iterrows():
     folium.CircleMarker([r.query_lat, r.query_lon], radius=2, color="blue").add_to(m)
-m.save("recency_frequency_outliers.html")
+m.save("/mnt/home/2715439w/sharedscratch/fairness/glasgow/results/recency_frequency_outliers.html")
 
 print("Yu's mark: high-freq but old - no typical reason found; low-freq but new: mainly new redevelpped areas.")
 # %%

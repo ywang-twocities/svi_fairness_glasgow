@@ -13,4 +13,5 @@ jobs
 *.csv
 *.parquet
 
-*html.py
+generate_html.py
+generate_distribution.py
