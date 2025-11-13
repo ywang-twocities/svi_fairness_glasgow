@@ -12,3 +12,5 @@ jobs
 *.html
 *.csv
 *.parquet
+
+*html.py
