@@ -2,10 +2,13 @@
 logs
 test_elephant_castle
 cache
-results
 deprecated
 __pycache__/
 jobs
+
+# results folder: keep folder, ignore contents
+results/*
+!results/.gitkeep
 
 # files to ignore
 *.pbf
