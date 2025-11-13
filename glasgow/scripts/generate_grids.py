@@ -44,7 +44,7 @@ grid_points = []
 for i, lat in enumerate(lat_vals):
     for j, lon in enumerate(lon_vals):
         p = Point(lon, lat)
-        if glasgow_poly.contains(p):  # 在边界内
+        if glasgow_poly.contains(p):  # make sure in grid
             grid_points.append((lat, lon))
     if i % 100 == 0:
         print(f"Row {i}/{len(lat_vals)} done, total grids: {len(grid_points)}")
