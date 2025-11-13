@@ -29,14 +29,11 @@ print(f"meaning there are {meta_data[meta_data['year'].notna()].shape[0] - meta_
 # %%
 import pandas as pd
 
-# 1️⃣ 去掉 year 或 month 为 NaN 的行
+# 1️⃣ Drop NaN values in year OR month 
 filtered = meta_data.dropna(subset=['year', 'month'])
 
-# 2️⃣ 对每个 panoid 保留 distance_m 最小的那一行 (snapped to its nearest grid point)
+# 2️⃣ keep unique panoid with min distance_m (snapped to its nearest grid point)
 filtered_unique = filtered.loc[filtered.groupby('panoid')['distance_m'].idxmin()]
-
-# 3️⃣ 结果重置索引（方便后续操作）
-# filtered_unique = filtered_unique.reset_index(drop=True)
 
 # ✅ example of the same panoid after filtering
 filtered_unique[filtered_unique['panoid']=='gEwac6dZ153bgC4Z_6YgtA']

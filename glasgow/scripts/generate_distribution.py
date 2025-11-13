@@ -22,7 +22,7 @@ from matplotlib.ticker import MaxNLocator
 sns.set_theme(style="whitegrid", palette="deep", context="paper")
 
 # %% 1. Load and prepare data
-csv_path = "/mnt/home/2715439w/sharedscratch/fairness/glasgow/metadata/glasgow_streetview_metadata_grid_20m_cleaned.csv"
+csv_path = "/mnt/home/2715439w/sharedscratch/fairness/glasgow/results/glasgow_streetview_metadata_grid_20m_cleaned.csv"
 df = pd.read_csv(csv_path).dropna(subset=["query_lat", "query_lon", "year", "month"])
 
 # Create a datetime column (month-level precision)
@@ -54,10 +54,10 @@ df_latest = (
 )
 from dateutil.relativedelta import relativedelta
 
-# 全局最新日期（全局最大年月）
+# gloabal latest date
 global_latest = df_latest["latest_date"].max()
 
-# 计算每个格子的时间差（以月为单位）
+# calculate time diff within each grids (in months) 
 df_latest["recency_months"] = df_latest["latest_date"].apply(
     lambda d: (global_latest.year - d.year) * 12 + (global_latest.month - d.month)
 )
@@ -107,11 +107,17 @@ plt.tight_layout()
 plt.show()
 
 # %%
-# 高频但旧
+'''
+Identify outlier grids based on temporal metrics
+high-freq but old.
+low-freq but new.
+(for test purpose only)
+'''
+# high-freq but old.
 high_old = g[(g["dated_count"] > g["dated_count"].quantile(0.75)) &
               (g["recency_months"] > g["recency_months"].quantile(0.75))]
 
-# 低频但新 
+# low-freq but new.
 '''from the map I see those are mainly newly built areas with new residential buildings'''
 low_new = g[(g["dated_count"] < g["dated_count"].quantile(0.25)) &
              (g["recency_months"] < g["recency_months"].quantile(0.25))]
@@ -124,5 +130,5 @@ for _, r in low_new.iterrows():
     folium.CircleMarker([r.query_lat, r.query_lon], radius=2, color="blue").add_to(m)
 m.save("recency_frequency_outliers.html")
 
-print("高频但旧：没啥特点；低频但新：主要是新建住宅区")
+print("Yu's mark: high-freq but old - no typical reason found; low-freq but new: mainly new redevelpped areas.")
 # %%

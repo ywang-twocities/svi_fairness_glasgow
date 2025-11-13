@@ -91,7 +91,7 @@ natural = osm.get_natural()
 
 # POIs (amenity, shop, tourism)
 pois = osm.get_pois()
-# 为了兼容你后续的逻辑，可以拆开：
+
 amenities = pois[pois["amenity"].notnull()]
 shops = pois[pois["shop"].notnull()]
 tourism = pois[pois["tourism"].notnull()]
@@ -158,10 +158,10 @@ print("✅ Spatial intersection completed:", len(joined_all), "records total")
 
 
 # %% ----------------------------- 5) Determine road_type ----------------------
-# 全部道路
+# all roads
 roads_all_27700 = to_27700(roads_all)
 
-# 所有道路的空间匹配
+# spatially join all roads to grid
 join_all = gpd.sjoin(
     grid_27700[["grid_id", "geometry"]],
     roads_all_27700[["geometry"]],
@@ -169,7 +169,7 @@ join_all = gpd.sjoin(
     predicate="intersects"
 )
 
-# 可驾车道路的空间匹配
+# drivable road spatial join
 roads_drivable_27700 = to_27700(roads_drivable)
 join_drive = gpd.sjoin(
     grid_27700[["grid_id", "geometry"]],
@@ -178,21 +178,20 @@ join_drive = gpd.sjoin(
     predicate="intersects"
 )
 
-# 三类逻辑分类
+# three categories: no-road, non-drivable, drivable
 grid["road_type"] = "no-road"
 # grid.loc[join_all["index_right"].notnull(), "road_type"] = "non-drivable"
 # grid.loc[join_drive["index_right"].notnull(), "road_type"] = "drivable"
-# 找出与任何道路相交的 grid_id
+# find grid_id that joins any types of roads
 grids_with_any_road = join_all.loc[join_all["index_right"].notnull(), "grid_id"].unique()
 grids_with_drive_road = join_drive.loc[join_drive["index_right"].notnull(), "grid_id"].unique()
 
-# 初始化
 grid["road_type"] = "no-road"
 
-# 先标记非可驾车道路
+# first tag non-drivable 
 grid.loc[grid["grid_id"].isin(grids_with_any_road), "road_type"] = "non-drivable"
 
-# 再覆盖可驾车道路
+# overlap with drivable
 grid.loc[grid["grid_id"].isin(grids_with_drive_road), "road_type"] = "drivable"
 
 print(f"✅ Road type classification completed. "

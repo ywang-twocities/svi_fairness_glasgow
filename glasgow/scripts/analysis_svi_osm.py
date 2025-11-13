@@ -59,4 +59,22 @@ merged = merged[cols]
 print(merged.head())
 # %%
 merged.to_csv(r"/mnt/home/2715439w/sharedscratch/fairness/glasgow/results/cross_svi_osm.csv", index=False)
+
+# %%
+summary = (
+    merged.groupby(["road_type", "grid_highway"], dropna=False)
+    .agg(
+        grid_count=("grid_id", "count"),              # 每类格网数量
+        total_dated_count=("dated_count", "sum"),     # 每类 dated_count 总和
+        mean_dated_count=("dated_count", "mean"),     # 平均每格网 dated_count
+        latest_date=("latest_date", "max")            # 每类的最新街景日期
+    )
+    .sort_values('mean_dated_count',ascending=False).reset_index()
+)
+
+# 可选：四舍五入 dated_count，便于展示
+summary["mean_dated_count"] = summary["mean_dated_count"].round(2)
+
+summary
+
 # %%
