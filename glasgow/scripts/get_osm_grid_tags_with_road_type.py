@@ -226,7 +226,7 @@ highway_df = tags_long[tags_long["tag_key"] == "highway"]
 def pick_main_highway(values):
     priority = [
         "motorway", "trunk", "primary", "secondary", "tertiary",
-        "residential", "service", "unclassified", "track", "path", "footway"
+        "residential", "service", "unclassified", "pedestrian", "track", "path", "footway"
     ]
     for p in priority:
         if p in values:

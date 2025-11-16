@@ -20,6 +20,7 @@ print("\n")
 # %%
 svi_meta["date"] = pd.to_datetime(svi_meta["year"].astype(int).astype(str) + "-" + svi_meta["month"].astype(int).astype(str))
 '''merge svi_summary with osm_tags on grid_id'''
+svi_meta.drop(columns=["query_lat", "query_lon"], inplace=True)
 merged = osm_tags.merge(svi_meta, on="grid_id", how="left")
 
 # move grid_id to the front
@@ -28,6 +29,6 @@ merged = merged[cols]
 
 print(merged.head())
 # %%
-merged.to_csv(r"/mnt/home/2715439w/sharedscratch/fairness/glasgow/results/cross_svi_osm.csv", index=False)
+merged.to_csv(r"/mnt/home/2715439w/sharedscratch/fairness/glasgow/results/merged_svi_osm.csv", index=False)
 
 # %%
